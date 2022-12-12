@@ -19,17 +19,16 @@ timer = pygame.time.Clock()
 font = pygame.font.Font("freesansbold.ttf", 20)
 level = boards[0]
 
-######## PLAYER ########
+# PLAYER
 PLAYER_IMGS = []
 for i in range(1, 5):
     PLAYER_IMGS.append(pygame.transform.scale(pygame.image.load(f"assets/guy/{i}.png"), (45, 45)))
 player_x = 450
 player_y = 663
+
 direction = 0
 counter = 0
-
-
-#######################
+flicker = True
 
 
 # Draw level's board
@@ -42,7 +41,7 @@ def draw_board(lvl):
             b = level[i][j]
             if b == 1:
                 pygame.draw.circle(screen, PELLETS_COLOR, (j * num2 + (0.5 * num2), i * num1 + (0.5 * num1)), 4)
-            if b == 2:
+            if b == 2 and not flicker:
                 pygame.draw.circle(screen, PELLETS_COLOR, (j * num2 + (0.5 * num2), i * num1 + (0.5 * num1)), 10)
             if b == 3:
                 pygame.draw.line(screen, BORDER_COLOR, (j * num2 + (0.5 * num2), i * num1),
@@ -86,6 +85,7 @@ run = True
 while run:
     timer.tick(FPS)
     counter = counter + 1 if counter < 19 else 0
+    flicker = True if 3 <= counter <= 5 else False
     screen.fill("black")
     draw_board(level)
     draw_player()
