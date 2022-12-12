@@ -1,5 +1,6 @@
-import pygame
 import math
+
+import pygame
 
 from board import boards
 
@@ -9,7 +10,7 @@ WIDTH, HEIGHT = 900, 950  # W & H of app
 FPS = 60
 
 BORDER_COLOR = (199, 36, 177)
-GHOST_BORDER_COLOR = (255,173,0)
+GHOST_BORDER_COLOR = (255, 173, 0)
 PELLETS_COLOR = (224, 231, 34)
 PI = math.pi
 
@@ -26,8 +27,12 @@ player_x = 450
 player_y = 663
 direction = 0
 counter = 0
+
+
 #######################
 
+
+# Draw level's board
 def draw_board(lvl):
     num1 = ((HEIGHT - 50) // 32)
     num2 = ((WIDTH - 50) // 30)
@@ -46,13 +51,15 @@ def draw_board(lvl):
                 pygame.draw.line(screen, BORDER_COLOR, (j * num2, i * num1 + (0.5 * num1)),
                                  (j * num2 + num2, i * num1 + (0.5 * num1)), 3)
             if b == 5:
-                pygame.draw.arc(screen, BORDER_COLOR, [(j * num2 - (num2 * 0.4)) - 2, (i * num1 + (0.5 * num1)), num2, num1],
+                pygame.draw.arc(screen, BORDER_COLOR,
+                                [(j * num2 - (num2 * 0.4)) - 2, (i * num1 + (0.5 * num1)), num2, num1],
                                 0, PI / 2, 3)
             if b == 6:
                 pygame.draw.arc(screen, BORDER_COLOR,
                                 [(j * num2 + (num2 * 0.5)), (i * num1 + (0.5 * num1)), num2, num1], PI / 2, PI, 3)
             if b == 7:
-                pygame.draw.arc(screen, BORDER_COLOR, [(j * num2 + (num2 * 0.5)), (i * num1 - (0.4 * num1)), num2, num1], PI,
+                pygame.draw.arc(screen, BORDER_COLOR,
+                                [(j * num2 + (num2 * 0.5)), (i * num1 - (0.4 * num1)), num2, num1], PI,
                                 3 * PI / 2, 3)
             if b == 8:
                 pygame.draw.arc(screen, BORDER_COLOR,
@@ -63,6 +70,7 @@ def draw_board(lvl):
                                  (j * num2 + num2, i * num1 + (0.5 * num1)), 3)
 
 
+# Draw pacguy
 def draw_player():
     if direction == 0:  # RIGHT
         screen.blit(PLAYER_IMGS[counter // 5], (player_x, player_y))
@@ -71,7 +79,7 @@ def draw_player():
     elif direction == 2:  # UP
         screen.blit(pygame.transform.rotate(PLAYER_IMGS[counter // 5], 90), (player_x, player_y))
     elif direction == 3:  # DOWN
-        screen.blit(PLAYER_IMGS[counter // 5], (player_x, player_y))
+        screen.blit(pygame.transform.rotate(PLAYER_IMGS[counter // 5], -90), (player_x, player_y))
 
 
 run = True
@@ -83,8 +91,20 @@ while run:
     draw_player()
 
     for event in pygame.event.get():
+        # Quit
         if event.type == pygame.QUIT:
             run = False
+
+        # Movement controls
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                direction = 0
+            if event.key == pygame.K_LEFT:
+                direction = 1
+            if event.key == pygame.K_UP:
+                direction = 2
+            if event.key == pygame.K_DOWN:
+                direction = 3
 
     pygame.display.flip()
 
