@@ -9,6 +9,7 @@ WIDTH, HEIGHT = 900, 950  # W & H of app
 FPS = 60
 
 BORDER_COLOR = (199, 36, 177)
+GHOST_BORDER_COLOR = (255,173,0)
 PELLETS_COLOR = (224, 231, 34)
 PI = math.pi
 
@@ -17,6 +18,15 @@ timer = pygame.time.Clock()
 font = pygame.font.Font("freesansbold.ttf", 20)
 level = boards[0]
 
+######## PLAYER ########
+PLAYER_IMGS = []
+for i in range(1, 5):
+    PLAYER_IMGS.append(pygame.transform.scale(pygame.image.load(f"assets/guy/{i}.png"), (45, 45)))
+player_x = 450
+player_y = 663
+direction = 0
+counter = 0
+#######################
 
 def draw_board(lvl):
     num1 = ((HEIGHT - 50) // 32)
@@ -53,11 +63,24 @@ def draw_board(lvl):
                                  (j * num2 + num2, i * num1 + (0.5 * num1)), 3)
 
 
+def draw_player():
+    if direction == 0:  # RIGHT
+        screen.blit(PLAYER_IMGS[counter // 5], (player_x, player_y))
+    elif direction == 1:  # LEFT
+        screen.blit(pygame.transform.flip(PLAYER_IMGS[counter // 5], True, False), (player_x, player_y))
+    elif direction == 2:  # UP
+        screen.blit(pygame.transform.rotate(PLAYER_IMGS[counter // 5], 90), (player_x, player_y))
+    elif direction == 3:  # DOWN
+        screen.blit(PLAYER_IMGS[counter // 5], (player_x, player_y))
+
+
 run = True
 while run:
     timer.tick(FPS)
+    counter = counter + 1 if counter < 19 else 0
     screen.fill("black")
     draw_board(level)
+    draw_player()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
